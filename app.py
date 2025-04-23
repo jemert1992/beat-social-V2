@@ -10,8 +10,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 # Import TikTok integration
-from api.tiktok_api import TikTokAPI
-from api.tiktok_service import TikTokService
+from .api.tiktok_api import TikTokAPI
+from .api.tiktok_service import TikTokService
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
