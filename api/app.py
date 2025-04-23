@@ -25,10 +25,11 @@ DEFAULT_CONFIG = {
         "trending_ratio": 0.8,  # 80% trending, 20% evergreen
         "reuse_ratio": 0.3  # 30% content can be reused across platforms
     },
-    "api_credentials": {
-        "tiktok": {
-            "api_key": os.environ.get("TIKTOK_API_KEY", ""),
-            "api_secret": os.environ.get("TIKTOK_API_SECRET_KEY", "")
+"api_credentials": {
+    "tiktok": {
+        "api_key": os.environ.get("TIKTOK_API_KEY", ""),
+        "api_secret": os.environ.get("SOCIAL_MEDIA_TOKEN", "")
+
         },
         "instagram": {
             "username": os.environ.get("INSTAGRAM_USERNAME", ""),
