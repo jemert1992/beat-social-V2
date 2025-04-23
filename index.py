@@ -1,11 +1,15 @@
-"""
-Entry point for Vercel serverless deployment.
-This file imports the Flask app from app.py and provides a handler function for Vercel.
-"""
+from flask import Flask, jsonify
 
-from flask import Flask
-import app
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return jsonify({"status": "online", "message": "Social Media Automation API is running"})
+
+@app.route('/api/status')
+def status():
+    return jsonify({"status": "online", "message": "API is operational"})
 
 # This is the handler for Vercel serverless functions
 def handler(request, response):
-    return app.app(request, response)
+    return app(request, response)
