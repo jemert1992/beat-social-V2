@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/*.py", "use": "@vercel/python" }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/api/app.py" }
+  ],
+  "env": {
+    "TIKTOK_API_SECRET": "@tiktok_api_secret"
+  }
+}
