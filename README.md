@@ -1,122 +1,89 @@
-# Social Media OAuth Implementation
+# Simplified TikTok API Integration Guide
 
-This package contains all the necessary files to implement OAuth authentication for TikTok and Instagram in your Social Media Automation System. This implementation allows admin users to manage multiple social media accounts through a secure web interface rather than using environment variables.
+This guide explains how to integrate the simplified TikTok API client with your existing Social Media Automation System. This implementation uses direct API access with your TikTok API credentials stored in Vercel environment variables, avoiding the complexity of OAuth flows.
 
-## Features
+## Files Overview
 
-- OAuth 2.0 authentication for TikTok and Instagram
-- Admin dashboard for managing multiple social media accounts
-- Secure token storage in a database
-- Token refresh and management
-- API integration using stored tokens
-- User and account management
+1. **tiktok_api.py**: Core API client that handles direct communication with TikTok's API
+2. **tiktok_service.py**: Service layer that provides higher-level functions and error handling
+3. **example_usage.py**: Example script showing how to use the integration
+4. **__init__.py**: Package initialization file
 
-## Directory Structure
+## Integration Steps
+
+### 1. Add Files to Your Repository
+
+Add these files to your GitHub repository in the following structure:
 
 ```
-oauth_implementation/
-├── api/
-│   ├── auth/
-│   │   ├── __init__.py
-│   │   ├── routes.py
-│   │   ├── tiktok.py
-│   │   └── instagram.py
-│   ├── accounts/
-│   │   ├── __init__.py
-│   │   └── routes.py
-│   └── app.py
-├── models/
-│   ├── __init__.py
-│   ├── user.py
-│   ├── account.py
-│   └── token.py
-├── services/
-│   ├── __init__.py
-│   ├── tiktok_service.py
-│   └── instagram_service.py
-├── static/
-│   ├── css/
-│   │   └── styles.css
-│   └── js/
-│       ├── auth.js
-│       └── dashboard.js
-├── templates/
-│   ├── auth/
-│   │   ├── login.html
-│   │   └── register.html
-│   ├── dashboard/
-│   │   ├── index.html
-│   │   ├── accounts.html
-│   │   └── settings.html
-│   └── base.html
-├── config.py
-├── requirements.txt
-└── database_setup.sql
+your-project/
+  ├── api/
+  │   ├── tiktok_integration/
+  │   │   ├── __init__.py
+  │   │   ├── tiktok_api.py
+  │   │   └── tiktok_service.py
+  │   └── app.py (your existing app)
 ```
 
-## Installation Instructions
+### 2. Update Your API Routes
 
-1. Copy all files to your GitHub repository, maintaining the directory structure
-2. Install required dependencies: `pip install -r requirements.txt`
-3. Set up the database using the provided SQL script
-4. Configure your TikTok and Instagram developer applications
-5. Update the config.py file with your application credentials
+In your `app.py` or main API file, add routes to use the TikTok integration:
 
-## Configuration
+```python
+from .tiktok_integration import TikTokService
 
-You'll need to create applications in both TikTok and Instagram developer portals:
+# Initialize TikTok service
+tiktok_service = TikTokService()
 
-### TikTok Developer Setup
+@app.route('/api/tiktok/post', methods=['POST'])
+def post_to_tiktok():
+    data = request.json
+    video_url = data.get('video_url')
+    caption = data.get('caption', '')
+    hashtags = data.get('hashtags', [])
+    
+    response = tiktok_service.post_video(video_url, caption, hashtags)
+    return jsonify(response)
 
-1. Go to [TikTok for Developers](https://developers.tiktok.com/)
-2. Create a new application
-3. Enable the Login Kit and Content Posting API
-4. Set your redirect URI to `https://your-domain.com/api/auth/tiktok/callback`
-5. Copy your Client Key and Client Secret to the config.py file
+@app.route('/api/tiktok/account', methods=['GET'])
+def get_tiktok_account():
+    response = tiktok_service.get_account_info()
+    return jsonify(response)
+```
 
-### Instagram Developer Setup
+### 3. Vercel Environment Variables
 
-1. Go to [Facebook for Developers](https://developers.facebook.com/)
-2. Create a new application
-3. Add the Instagram Basic Display product
-4. Set your redirect URI to `https://your-domain.com/api/auth/instagram/callback`
-5. Copy your App ID and App Secret to the config.py file
+Make sure you have these environment variables set in your Vercel project:
 
-## Usage
+- `TIKTOK_API_KEY`: Your TikTok API key (Client Key)
+- `SOCIAL_MEDIA_TOKEN`: Your TikTok API secret (Client Secret)
 
-After installation, your system will have:
+### 4. Testing the Integration
 
-1. A login page for administrators
-2. A dashboard for managing social media accounts
-3. "Connect with TikTok" and "Connect with Instagram" buttons for adding accounts
-4. Account management interface for viewing and managing connected accounts
-5. Automatic token refresh and secure storage
+You can test the integration by:
 
-## Security Considerations
+1. Making a POST request to `/api/tiktok/post` with:
+   ```json
+   {
+     "video_url": "https://example.com/video.mp4",
+     "caption": "Check out this video!",
+     "hashtags": ["fyp", "viral", "trending"]
+   }
+   ```
 
-- All tokens are encrypted in the database
-- HTTPS is required for all OAuth redirects
-- CSRF protection is implemented for all forms
-- Session management with secure cookies
-- Rate limiting on authentication endpoints
+2. Making a GET request to `/api/tiktok/account` to verify your account connection
 
-## API Integration
+## Troubleshooting
 
-The existing TikTok and Instagram API integrations have been updated to use tokens from the database rather than environment variables. This allows for:
+- **API Key Issues**: Ensure your API keys are correctly set in Vercel environment variables
+- **Video Format**: TikTok only accepts certain video formats (MP4 is recommended)
+- **Rate Limiting**: TikTok may rate limit your requests if you make too many in a short period
+- **Error Handling**: Check the response for detailed error messages
 
-- Multiple account management
-- Automatic token refresh
-- Better error handling for authentication issues
-- User-specific content posting
+## Next Steps
 
-## Database Schema
+- Add more TikTok API features as needed
+- Implement similar direct API integration for Instagram
+- Create a simple dashboard to manage your posts
 
-The implementation uses three main tables:
-
-1. `users` - Admin users who can manage accounts
-2. `social_accounts` - Connected social media accounts
-3. `oauth_tokens` - Securely stored access and refresh tokens
-
-## Support
-
-For questions or issues with this implementation, please refer to the documentation or contact support.
+For any questions or issues, refer to the TikTok API documentation or contact support.
