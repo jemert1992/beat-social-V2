@@ -28,7 +28,7 @@ DEFAULT_CONFIG = {
     "api_credentials": {
         "tiktok": {
             "api_key": os.environ.get("TIKTOK_API_KEY", ""),
-            "api_secret": os.environ.get("TIKTOK_API_SECRET", "")
+            "api_secret": os.environ.get("TIKTOK_API_SECRET_KEY", "")
         },
         "instagram": {
             "username": os.environ.get("INSTAGRAM_USERNAME", ""),
