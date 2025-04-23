@@ -1,11 +1,10 @@
-{
-  "version": 2,
-  "builds": [
-    { "src": "app.py", "use": "@vercel/python" },
-    { "src": "api/**/*.py", "use": "@vercel/python" }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/app.py" }
-  ]
-}
+"routes": [
+  { "src": "/api/tiktok/post", "dest": "/app.py" },
+  { "src": "/api/tiktok/account", "dest": "/app.py" },
+  { "src": "/api/status", "dest": "/app.py" },
+  { "src": "/api/configure", "dest": "/app.py" },
+  { "src": "/api/plan", "dest": "/app.py" },
+  { "src": "/api/execute", "dest": "/app.py" },
+  { "src": "/api/report", "dest": "/app.py" },
+  { "src": "/(.*)", "dest": "/app.py" }
+]
